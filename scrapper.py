@@ -40,3 +40,29 @@ if not client.is_user_authorized():
     client.send_code_request(phone)
     client.sign_in(phone, input('Enter the code recieved to your Telegram messenger: '))
 
+chats = []
+last_date = None
+chunk_size = 200
+groups=[]
+
+result = client(GetDialogsRequest(
+             offset_date=last_date,
+             offset_id=0,
+             offset_peer=InputPeerEmpty(),
+             limit=chunk_size,
+             hash = 0
+         ))
+chats.extend(result.chats)
+
+for chat in chats:
+    try:
+        if chat.megagroup== True:
+            groups.append(chat)
+    except:
+        continue
+
+print('pilih group target untuk scrape members:')
+i=0
+for g in groups:
+    print(str(i) + '- ' + g.title)
+    i+=1
