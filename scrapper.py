@@ -69,3 +69,53 @@ for g in groups:
 
 g_index = input("pilih No: ")
 target_group=groups[int(g_index)]
+
+print('Mengambil Anggota...')
+all_participants = []
+all_participants = client.iter_participants(target_group, limit=None, filter=None, aggressive=True)
+
+with open("data.csv","w",encoding='UTF-8') as f:
+    writer = csv.writer(f,delimiter=",",lineterminator="\n")
+    writer.writerow(['sr. no.', 'username','user id', 'access hash','name','group', 'group id','last seen'])
+    i = 0
+    try:
+        for user in all_participants:
+            accept = True
+
+            try:
+                lastDate = user.status.was_online
+                num_months = (datetime.now().year - lastDate.year) * 12 + (datetime.now().month - lastDate.month)
+                if (num_months > 1):
+                    accept = False
+            except:
+                continue
+            if (accept):
+                i += 1
+                if user.username:
+                    username = user.username
+                else:
+                    username = ""
+                if user.first_name:
+                    first_name = user.first_name
+                else:
+                    first_name = ""
+                if user.last_name:
+                    last_name = user.last_name
+                else:
+                    last_name = ""
+                name = (first_name + ' ' + last_name).strip()
+
+                if isinstance(user.status, types.UserStatusOffline):
+                    last_name = ""
+
+                writer.writerow([username, user.id, user.access_hash, name, target_group.title, target_group.id, user.status.was_online])
+                time.sleep(0.1)
+
+    except MultiError as e:
+        # The first and third requests worked.
+        first = e.results[0]
+        second = e.exceptions[1]
+        third = e.results[2]
+        # The second request failed.
+
+print('Members scraped successfully.')
