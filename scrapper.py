@@ -66,3 +66,6 @@ i=0
 for g in groups:
     print(str(i) + '- ' + g.title)
     i+=1
+
+g_index = input("pilih No: ")
+target_group=groups[int(g_index)]
