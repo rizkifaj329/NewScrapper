@@ -33,3 +33,10 @@ from datetime import date, datetime, timedelta
 api_id = 11489981
 api_hash = '651ad564b2323926e9cd72d51e040e30'
 phone = '62859106555568'
+client = TelegramClient(str(phone), api_id, api_hash)
+
+client.connect()
+if not client.is_user_authorized():
+    client.send_code_request(phone)
+    client.sign_in(phone, input('Enter the code recieved to your Telegram messenger: '))
+
