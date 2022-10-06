@@ -29,3 +29,7 @@ import sys
 import csv
 import traceback
 from datetime import date, datetime, timedelta
+
+api_id = 11489981
+api_hash = '651ad564b2323926e9cd72d51e040e30'
+phone = '62859106555568'
